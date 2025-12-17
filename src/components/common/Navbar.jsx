@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/images/logo.png";
 
 const navLinks = [
   { name: "Home", path: "/" },
@@ -30,14 +31,14 @@ const Navbar = () => {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto pl-2 pr-6 h-16 flex items-center justify-between">
 
         {/* Logo */}
         <NavLink to="/" className="flex items-center gap-2">
           <img
-            src="/logo_IntifAI.png"
+            src={logo}
             alt="IntefAI"
-            className="h-8 w-auto"
+            className="h-16 w-auto"
           />
         </NavLink>
 
@@ -76,7 +77,7 @@ const Navbar = () => {
         </nav>
 
         {/* CTA */}
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <NavLink
             to="/contact"
             className="px-5 py-2 rounded-full text-sm font-medium

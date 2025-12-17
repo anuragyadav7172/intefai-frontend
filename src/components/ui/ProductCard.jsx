@@ -1,40 +1,24 @@
-import { motion } from "framer-motion";
-
-const ProductCard = ({ title, description, accent }) => {
+const ProductCard = ({ title, description, color }) => {
   return (
-    <motion.div
-      whileHover={{ y: -8 }}
-      transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      className="relative group rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 overflow-hidden"
-    >
-      {/* Gradient Glow */}
+    <div className="relative rounded-2xl border border-white/10 bg-white/5 p-6 hover:-translate-y-2 transition duration-300">
+      
+      {/* Top gradient bar */}
       <div
-        className={`pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-30 transition duration-500 bg-gradient-to-br ${accent}`}
+        className={`h-1 w-full rounded-full bg-gradient-to-r ${color}`}
       />
 
-      {/* Content */}
-      <div className="relative z-10">
-        <h3 className="text-xl font-semibold mb-3">
-          {title}
-        </h3>
-        
+      <h3 className="mt-6 text-xl font-semibold">
+        {title}
+      </h3>
 
-        <p className="text-white/70 leading-relaxed">
-          {description}
-        </p>
-        <h3 className="text-2xl font-bold text-red-500">
-  TEST CARD – {title}
-</h3>
+      <p className="mt-3 text-white/70 leading-relaxed">
+        {description}
+      </p>
 
-
-        <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-primary">
-          <span>Learn more</span>
-          <span className="transition-transform group-hover:translate-x-1">
-            →
-          </span>
-        </div>
-      </div>
-    </motion.div>
+      <button className="mt-6 text-sm text-primary hover:underline">
+        Learn more →
+      </button>
+    </div>
   );
 };
 

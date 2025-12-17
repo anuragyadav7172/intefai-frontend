@@ -1,47 +1,36 @@
-import { motion } from "framer-motion";
 import Container from "@/components/common/Container";
 import ProductCard from "@/components/ui/ProductCard";
 import { products } from "@/constants/products";
 
 const Products = () => {
   return (
-    <section className="relative py-28 overflow-hidden">
-      {/* Soft background glow */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 blur-3xl" />
+    <section className="py-24">
+      <Container>
+        
+        {/* Section Header */}
+        <div className="max-w-2xl mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold">
+            Our <span className="text-primary">Services</span>
+          </h2>
 
-      <Container className="relative">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="max-w-2xl mb-20"
-        >
-          <h1 className="text-4xl sm:text-5xl font-bold">
-            Products & <span className="text-primary">Solutions</span>
-          </h1>
-
-          <p className="mt-5 text-lg text-white/70">
-            Powerful AI-driven solutions designed to scale with your business
-            and unlock intelligent automation.
+          <p className="mt-4 text-white/70 text-lg">
+            Smart digital marketing solutions designed to grow your brand,
+            increase reach, and drive measurable results.
           </p>
-        </motion.div>
+        </div>
 
-        {/* GRID — THIS IS WHAT YOU ARE MISSING */}
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((product, index) => (
-            <motion.div
+        {/* Products Grid */}
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {products.map((product) => (
+            <ProductCard
               key={product.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-            >
-              <ProductCard {...product} />
-            </motion.div>
+              title={product.title}
+              description={product.description}
+              color={product.color}
+            />
           ))}
         </div>
+
       </Container>
     </section>
   );
