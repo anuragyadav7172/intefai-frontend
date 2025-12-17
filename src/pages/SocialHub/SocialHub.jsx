@@ -2,10 +2,14 @@ import { motion } from "framer-motion";
 import Container from "@/components/common/Container";
 import SocialCard from "@/components/ui/SocialCard";
 import { socialLinks } from "@/constants/socialLinks";
+import SocialParallaxScene from "@/components/three/SocialParallaxScene";
 
 const SocialHub = () => {
   return (
-    <section className="relative py-32">
+    <section className="relative py-32 overflow-hidden">
+      {/* 3D Parallax Background */}
+      <SocialParallaxScene />
+
       {/* Ambient background */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
 
