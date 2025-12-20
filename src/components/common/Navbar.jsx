@@ -1,136 +1,167 @@
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaBars, FaXmark } from "react-icons/fa6"; // Ensure react-icons is installed
 import logo from "@/assets/images/logo.png";
 
-const navLinks = [
-  { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
-  { name: "Products", path: "/products" },
-  { name: "Social", path: "/social" },
-  { name: "Careers", path: "/careers" },
-  { name: "Contact", path: "/contact" },
+const navItems = [
+  { label: "Home", id: "home" },
+  { label: "About", id: "about" },
+  { label: "Services", id: "services" },
+  { label: "Contact", id: "contact" },
 ];
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState("home");
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Smooth Scroll Function
+  const scrollToSection = (id) => {
+    setMobileMenuOpen(false); // Close mobile menu if open
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const yOffset = -80; // Adjusted for slightly taller header
+    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
+  // Scroll Detection Logic
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      // 1. Detect if scrolled down for background styling
+      setIsScrolled(window.scrollY > 50);
+
+      // 2. Detect active section
+      navItems.forEach((item) => {
+        const section = document.getElementById(item.id);
+        if (!section) return;
+        const rect = section.getBoundingClientRect();
+        // Check if section is roughly in the middle of viewport
+        if (rect.top <= 150 && rect.bottom >= 150) {
+          setActive(item.id);
+        }
+      });
+    };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300
-      ${
-        scrolled
-          ? "bg-black/70 backdrop-blur-md shadow-lg"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto pl-2 pr-6 h-16 flex items-center justify-between">
+    <>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className={`fixed top-0 w-full z-50 transition-all duration-300 border-b
+        ${
+          isScrolled
+            ? "bg-[#05070d]/80 backdrop-blur-md border-white/10 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+            : "bg-transparent border-transparent py-5"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          
+          {/* --- LOGO --- */}
+          <button
+            onClick={() => scrollToSection("home")}
+            className="relative group z-50"
+          >
+            <div className="absolute -inset-2 bg-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
+            <img
+              src={logo}
+              alt="IntefAI Logo"
+              className="relative h-10 md:h-12 w-auto transition-transform duration-300 group-hover:scale-105"
+            />
+          </button>
 
-        {/* Logo */}
-        <NavLink to="/" className="flex items-center gap-2">
-          <img
-            src={logo}
-            alt="IntefAI"
-            className="h-16 w-auto"
-          />
-        </NavLink>
-
-        {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-8">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.name}
-              to={link.path}
-              className={({ isActive }) =>
-                `group relative text-sm transition
-                ${
-                  isActive
-                    ? "text-white"
-                    : "text-gray-300 hover:text-white"
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  {link.name}
-                  <span
-                    className={`absolute left-0 -bottom-1 h-[2px] w-full
-                    bg-gradient-to-r from-cyan-400 to-purple-500
-                    origin-left transition-transform duration-300
-                    ${
-                      isActive
-                        ? "scale-x-100"
-                        : "scale-x-0 group-hover:scale-x-100"
-                    }`}
+          {/* --- DESKTOP NAVIGATION --- */}
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300
+                  ${active === item.id ? "text-white" : "text-gray-400 hover:text-white"}
+                `}
+              >
+                {/* Active Indicator (Glowing Pill) */}
+                {active === item.id && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
-                </>
-              )}
-            </NavLink>
-          ))}
-        </nav>
+                )}
+                
+                {/* Text Label */}
+                <span className="relative z-10">{item.label}</span>
+              </button>
+            ))}
 
-        {/* CTA */}
-        <div className="hidden lg:block">
-          <NavLink
-            to="/contact"
-            className="px-5 py-2 rounded-full text-sm font-medium
-            bg-gradient-to-r from-cyan-400 to-purple-500
-            text-black hover:scale-105 transition-transform"
+            {/* CTA Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="ml-6 px-5 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white text-xs font-bold uppercase tracking-wider shadow-lg hover:shadow-cyan-500/25 transition-all"
+            >
+              Get Started
+            </motion.button>
+          </div>
+
+          {/* --- MOBILE TOGGLE --- */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden relative z-50 p-2 text-white/80 hover:text-cyan-400 transition-colors"
           >
-            Get Started
-          </NavLink>
+            {mobileMenuOpen ? <FaXmark size={24} /> : <FaBars size={24} />}
+          </button>
         </div>
+      </motion.nav>
 
-        {/* Mobile Toggle */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden text-white text-2xl"
-          aria-label="Toggle menu"
-        >
-          ☰
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
+      {/* --- MOBILE MENU OVERLAY --- */}
       <AnimatePresence>
-        {menuOpen && (
+        {mobileMenuOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="md:hidden bg-black/90 backdrop-blur-md px-6 py-6"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "100vh" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-0 z-40 bg-[#05070d]/95 backdrop-blur-xl md:hidden flex flex-col items-center justify-center space-y-8"
           >
-            <div className="flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <NavLink
-                  key={link.name}
-                  to={link.path}
-                  onClick={() => setMenuOpen(false)}
-                  className={({ isActive }) =>
-                    `text-sm transition
-                    ${
-                      isActive
-                        ? "text-primary"
-                        : "text-gray-300 hover:text-white"
-                    }`
-                  }
-                >
-                  {link.name}
-                </NavLink>
-              ))}
-            </div>
+            {/* Mobile Links */}
+            {navItems.map((item, index) => (
+              <motion.button
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.1 }}
+                onClick={() => scrollToSection(item.id)}
+                className={`text-2xl font-bold tracking-wide
+                  ${active === item.id 
+                    ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500" 
+                    : "text-white/60"
+                  }`}
+              >
+                {item.label}
+              </motion.button>
+            ))}
+            
+            {/* Mobile CTA */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 }}
+              className="mt-8 px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold shadow-lg"
+            >
+              Get Started
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 };
 
