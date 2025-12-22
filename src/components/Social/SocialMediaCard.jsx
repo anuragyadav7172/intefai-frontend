@@ -5,13 +5,12 @@ import { FiArrowUpRight } from "react-icons/fi";
 const SocialMediaCard = ({ icon: Icon, name, link, colorClass = "from-cyan-400 to-blue-500", bgImage }) => {
   const ref = useRef(null);
 
-  // Motion Values
+  // --- 3D TILT LOGIC (Kept same, degrades gracefully on mobile) ---
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Spring Physics
   const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
   const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
 
@@ -46,6 +45,7 @@ const SocialMediaCard = ({ icon: Icon, name, link, colorClass = "from-cyan-400 t
       onMouseLeave={handleMouseLeave}
       initial="initial"
       whileHover="hover"
+      // On mobile, we reduce the perspective slightly so it doesn't look weird while scrolling
       style={{
         rotateX,
         rotateY,
@@ -57,17 +57,26 @@ const SocialMediaCard = ({ icon: Icon, name, link, colorClass = "from-cyan-400 t
           LAYER 1: The Glass Body & Background Image
          -------------------------------------------------- */}
       <div 
-        className="absolute inset-0 rounded-3xl border border-white/10 overflow-hidden bg-[#05070d] transition-all duration-300 group-hover:border-white/20 shadow-2xl shadow-black/50"
+        className="absolute inset-0 rounded-3xl border border-white/10 overflow-hidden bg-[#05070d] transition-all duration-300 lg:group-hover:border-white/20 shadow-2xl shadow-black/50"
         style={{ transform: "translateZ(0px)" }}
       >
         {/* Background Image Logic */}
         {bgImage && (
             <>
                 <div 
-                    className="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500 grayscale group-hover:grayscale-0"
+                    className={`
+                      absolute inset-0 bg-cover bg-center transition-all duration-500
+                      
+                      /* MOBILE: Always colored, slightly zoomed, visible opacity */
+                      opacity-50 grayscale-0 scale-105
+
+                      /* DESKTOP (lg): Grayscale, lower opacity, normal scale -> Change on Hover */
+                      lg:opacity-40 lg:grayscale lg:scale-100 
+                      lg:group-hover:opacity-60 lg:group-hover:scale-110 lg:group-hover:grayscale-0
+                    `}
                     style={{ backgroundImage: `url(${bgImage})` }}
                 />
-                {/* Dark Gradient Overlay for readability */}
+                {/* Dark Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-90" />
             </>
         )}
@@ -78,9 +87,9 @@ const SocialMediaCard = ({ icon: Icon, name, link, colorClass = "from-cyan-400 t
         {/* Noise Texture */}
         <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay rounded-3xl" />
         
-        {/* Spotlight Effect */}
+        {/* Spotlight Effect (Desktop Only - Mobile doesn't need this) */}
         <motion.div
-          className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-300 lg:group-hover:opacity-100"
           style={{
             background: useTransform(
               [mouseX, mouseY],
@@ -90,7 +99,15 @@ const SocialMediaCard = ({ icon: Icon, name, link, colorClass = "from-cyan-400 t
         />
         
         {/* Bottom Color Glow */}
-        <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-1/2 bg-gradient-to-t ${colorClass} opacity-0 group-hover:opacity-30 blur-[60px] transition-opacity duration-500`} />
+        <div className={`
+            absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-1/2 bg-gradient-to-t ${colorClass} blur-[60px] transition-opacity duration-500
+            
+            /* MOBILE: Glow is always slightly visible */
+            opacity-20
+            
+            /* DESKTOP: Glow hidden until hover */
+            lg:opacity-0 lg:group-hover:opacity-30
+        `} />
       </div>
 
       {/* --------------------------------------------------
@@ -98,12 +115,20 @@ const SocialMediaCard = ({ icon: Icon, name, link, colorClass = "from-cyan-400 t
          -------------------------------------------------- */}
       <div 
         style={{ transform: "translateZ(70px)" }}
-        className="relative z-10 mb-4 p-4 rounded-2xl bg-white/5 border border-white/10 transition-all duration-300 group-hover:-translate-y-2"
+        className="relative z-10 mb-4 p-4 rounded-2xl bg-white/5 border border-white/10 transition-all duration-300 lg:group-hover:-translate-y-2"
       >
-        {/* Colored Shadow Behind Icon (Fixes visibility issues) */}
-        <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${colorClass} opacity-0 blur-md group-hover:opacity-40 transition-opacity duration-300`} />
+        {/* Colored Shadow Behind Icon */}
+        <div className={`
+            absolute inset-0 rounded-2xl bg-gradient-to-br ${colorClass} blur-md transition-opacity duration-300
+            
+            /* MOBILE: Always visible */
+            opacity-30
+
+            /* DESKTOP: Hidden until hover */
+            lg:opacity-0 lg:group-hover:opacity-40
+        `} />
         
-        {/* The Icon (White text) */}
+        {/* The Icon */}
         <div className="relative text-4xl text-white drop-shadow-lg">
           <Icon />
         </div>
@@ -113,7 +138,7 @@ const SocialMediaCard = ({ icon: Icon, name, link, colorClass = "from-cyan-400 t
         style={{ transform: "translateZ(40px)" }}
         className="relative z-10 flex flex-col items-center"
       >
-        <h3 className="text-white font-bold tracking-widest uppercase text-sm group-hover:text-cyan-200 transition-colors drop-shadow-md">
+        <h3 className="text-white font-bold tracking-widest uppercase text-sm lg:group-hover:text-cyan-200 transition-colors drop-shadow-md">
             {name}
         </h3>
         <span className="text-[10px] text-gray-300 mt-1 drop-shadow-md">Connect with us</span>
@@ -124,7 +149,15 @@ const SocialMediaCard = ({ icon: Icon, name, link, colorClass = "from-cyan-400 t
          -------------------------------------------------- */}
       <div 
         style={{ transform: "translateZ(30px)" }}
-        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300"
+        className={`
+            absolute top-4 right-4 transition-all duration-300
+            
+            /* MOBILE: Always visible */
+            opacity-100
+
+            /* DESKTOP: Hidden until hover */
+            lg:opacity-0 lg:group-hover:opacity-100
+        `}
       >
          <div className="p-2 rounded-full bg-white/10 text-white border border-white/10 backdrop-blur-md">
             <FiArrowUpRight />

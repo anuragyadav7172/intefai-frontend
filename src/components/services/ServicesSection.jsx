@@ -1,91 +1,194 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { FiZap, FiTarget, FiBarChart2, FiUsers, FiArrowRight } from "react-icons/fi";
+import { 
+  FaMobileAlt, FaBrain, FaBullhorn, FaShieldAlt, 
+  FaSearch, FaCode, FaGlobe, FaPalette, FaArrowRight 
+} from "react-icons/fa";
 
-const ServicesSection = () => {
-  const services = [
-    {
-      icon: FiZap,
-      title: "AI Content Creation",
-      desc: "Generative AI models that write, design, and optimize content that sounds exactly like your brand.",
-      color: "group-hover:text-cyan-400",
-      gradient: "from-cyan-500/20 to-blue-500/20"
-    },
-    {
-      icon: FiTarget,
-      title: "Hyper-Targeting",
-      desc: "Using predictive algorithms to find customers who are ready to buy before they even search.",
-      color: "group-hover:text-purple-400",
-      gradient: "from-purple-500/20 to-pink-500/20"
-    },
-    {
-      icon: FiBarChart2,
-      title: "Predictive Analytics",
-      desc: "Dashboards that don't just show you what happened, but tell you what to do next.",
-      color: "group-hover:text-emerald-400",
-      gradient: "from-emerald-500/20 to-green-500/20"
-    },
-    {
-      icon: FiUsers,
-      title: "Social Automation",
-      desc: "Full-stack management of your digital presence, running 24/7 on autopilot.",
-      color: "group-hover:text-orange-400",
-      gradient: "from-orange-500/20 to-red-500/20"
-    }
-  ];
+const services = [
+  { 
+    title: "App Development", 
+    desc: "Native iOS & Android solutions tailored for performance. We use the latest frameworks to ensure your app scales seamlessly.",
+    icon: FaMobileAlt, 
+    color: "rgba(6, 182, 212, 0.4)" // Cyan
+  },
+  { 
+    title: "Data Analysis & AI", 
+    desc: "Predictive modeling and machine learning integration to help you make data-driven decisions.",
+    icon: FaBrain, 
+    color: "rgba(168, 85, 247, 0.4)" // Purple
+  },
+  { 
+    title: "Digital Marketing", 
+    desc: "Strategic campaigns that drive ROI. From PPC to social media mastery, we ensure your brand gets the visibility it deserves.",
+    icon: FaBullhorn, 
+    color: "rgba(236, 72, 153, 0.4)" // Pink
+  },
+  { 
+    title: "Security System", 
+    desc: "End-to-end encryption and vulnerability testing to protect your digital assets.",
+    icon: FaShieldAlt, 
+    color: "rgba(16, 185, 129, 0.4)" // Emerald
+  },
+  { 
+    title: "SEO Optimization", 
+    desc: "Ranking your business at the top of search results using white-hat techniques that last.",
+    icon: FaSearch, 
+    color: "rgba(245, 158, 11, 0.4)" // Amber
+  },
+  { 
+    title: "Software Dev", 
+    desc: "Scalable SaaS platforms and enterprise software built for specific business needs.",
+    icon: FaCode, 
+    color: "rgba(59, 130, 246, 0.4)" // Blue
+  },
+  { 
+    title: "Website Dev", 
+    desc: "High-performance, responsive websites that convert visitors into loyal customers.",
+    icon: FaGlobe, 
+    color: "rgba(99, 102, 241, 0.4)" // Indigo
+  },
+  { 
+    title: "UI/UX Designing", 
+    desc: "User-centric interfaces that look beautiful and function perfectly.",
+    icon: FaPalette, 
+    color: "rgba(139, 92, 246, 0.4)" // Violet
+  },
+];
+
+const SpotlightCard = ({ title, desc, icon: Icon, color, onInquiry }) => {
+  const divRef = useRef(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isLongText = desc.length > 80;
+
+  const handleMouseMove = (e) => {
+    if (!divRef.current) return;
+    const rect = divRef.current.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const handleFocus = () => {
+    setOpacity(1);
+  };
+
+  const handleBlur = () => {
+    setOpacity(0);
+  };
+
+  const toggleReadMore = (e) => {
+    e.stopPropagation(); // Prevents clicking the card when clicking "Read More"
+    setIsExpanded(!isExpanded);
+  };
 
   return (
-    <section id="services" className="relative py-28 bg-[#05070d]">
-      <div className="relative max-w-7xl mx-auto px-6">
-        
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Intelligent Services for <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
-              Modern Brands
-            </span>
-          </h2>
-          <p className="text-xl text-white/60">
-            Stop guessing. Start using AI to predict, automate, and scale.
-          </p>
+    <div
+      ref={divRef}
+      onClick={onInquiry}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleFocus}
+      onMouseLeave={handleBlur}
+      className="group relative flex h-full w-full flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a] px-6 py-8 shadow-2xl transition-all duration-300 hover:border-white/20 active:scale-[0.98] cursor-pointer"
+    >
+      {/* Spotlight Gradient */}
+      <div
+        className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300"
+        style={{
+          opacity,
+          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${color}, transparent 40%)`,
+        }}
+      />
+      
+      {/* Grid Pattern */}
+      <div 
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-20"
+        style={{
+             backgroundImage: "radial-gradient(rgba(255,255,255,0.2) 1px, transparent 1px)",
+             backgroundSize: "24px 24px"
+        }}
+      />
+
+      {/* Hover Arrow Icon */}
+      <div className="absolute top-4 right-4 translate-x-4 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+         <FaArrowRight className="text-white/50" />
+      </div>
+
+      <div className="relative z-10 flex flex-col h-full">
+        <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:bg-white/10 group-hover:text-white"
+             style={{ boxShadow: opacity ? `0 0 20px ${color}` : 'none' }}
+        >
+          <Icon className="text-2xl" />
         </div>
 
-        {/* Grid */}
-        <div className="grid gap-6 md:grid-cols-2">
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group relative h-full p-8 rounded-3xl bg-[#0b0f19] border border-white/5 hover:border-white/10 transition-all duration-300 hover:shadow-2xl overflow-hidden"
-            >
-              {/* Hover Gradient Background */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-              
-              <div className="relative z-10">
-                <div className={`w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 text-white transition-colors duration-300 ${service.color}`}>
-                  <service.icon className="w-7 h-7" />
-                </div>
-                
-                <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
-                <p className="text-gray-400 text-lg leading-relaxed mb-8 group-hover:text-white/80 transition-colors">
-                  {service.desc}
-                </p>
-                
-                <div className="flex items-center gap-2 text-sm font-bold text-white/40 group-hover:text-white transition-colors cursor-pointer">
-                  Explore Service <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            </motion.div>
+        <div className="mt-auto">
+          <h3 className="mb-2 text-xl font-bold text-white tracking-wide group-hover:text-cyan-50 transition-colors">
+            {title}
+          </h3>
+          <div className="relative">
+            <p className={`text-sm leading-relaxed text-gray-400 transition-all duration-300 group-hover:text-gray-300 ${isExpanded ? "" : "line-clamp-2"}`}>
+              {desc}
+            </p>
+            {isLongText && (
+              <button 
+                onClick={toggleReadMore}
+                className="mt-2 text-xs font-bold uppercase tracking-wider text-cyan-400 hover:text-cyan-300 focus:outline-none transition-colors"
+              >
+                {isExpanded ? "Read Less" : "Read More"}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ServicesSection = () => {
+  // Navigation Handler
+  const handleInquiryNavigation = () => {
+    const section = document.getElementById("inquiry");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      console.warn("Inquiry section not found. Ensure ID 'inquiry' is set in InquirySection.jsx");
+    }
+  };
+
+  return (
+    <section id="services" className="py-24 bg-[#05070d] relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-900/10 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="mb-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-4xl font-bold text-white"
+          >
+            Core Expertise
+          </motion.h2>
+          <div className="mt-4 h-1 w-20 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full" />
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {services.map((service, i) => (
+            <SpotlightCard 
+                key={i} 
+                {...service} 
+                onInquiry={handleInquiryNavigation} 
+            />
           ))}
         </div>
-
       </div>
     </section>
   );
 };
 
 export default ServicesSection;
+export const navItems = [
+  { label: "Home", id: "home" },
+  { label: "About", id: "about" },
+  { label: "Services", id: "services" },
+  { label: "Contact", id: "contact" },
+];

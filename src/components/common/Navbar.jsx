@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaBars, FaXmark } from "react-icons/fa6"; // Ensure react-icons is installed
+import { FaBars, FaXmark } from "react-icons/fa6"; 
 import logo from "@/assets/images/logo.png";
 
 const navItems = [
   { label: "Home", id: "home" },
   { label: "About", id: "about" },
   { label: "Services", id: "services" },
-  { label: "Contact", id: "contact" },
+  // CHANGED: id changed from 'contact' to 'inquiry' to match your new section
+  { label: "Contact", id: "inquiry" }, 
 ];
 
 const Navbar = () => {
@@ -15,30 +16,25 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Smooth Scroll Function
   const scrollToSection = (id) => {
-    setMobileMenuOpen(false); // Close mobile menu if open
+    setMobileMenuOpen(false); 
     const el = document.getElementById(id);
     if (!el) return;
 
-    const yOffset = -80; // Adjusted for slightly taller header
+    const yOffset = -80; 
     const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
     window.scrollTo({ top: y, behavior: "smooth" });
   };
 
-  // Scroll Detection Logic
   useEffect(() => {
     const handleScroll = () => {
-      // 1. Detect if scrolled down for background styling
       setIsScrolled(window.scrollY > 50);
 
-      // 2. Detect active section
       navItems.forEach((item) => {
         const section = document.getElementById(item.id);
         if (!section) return;
         const rect = section.getBoundingClientRect();
-        // Check if section is roughly in the middle of viewport
         if (rect.top <= 150 && rect.bottom >= 150) {
           setActive(item.id);
         }
@@ -64,7 +60,6 @@ const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           
-          {/* --- LOGO --- */}
           <button
             onClick={() => scrollToSection("home")}
             className="relative group z-50"
@@ -77,7 +72,6 @@ const Navbar = () => {
             />
           </button>
 
-          {/* --- DESKTOP NAVIGATION --- */}
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <button
@@ -87,7 +81,6 @@ const Navbar = () => {
                   ${active === item.id ? "text-white" : "text-gray-400 hover:text-white"}
                 `}
               >
-                {/* Active Indicator (Glowing Pill) */}
                 {active === item.id && (
                   <motion.div
                     layoutId="active-pill"
@@ -95,23 +88,21 @@ const Navbar = () => {
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-                
-                {/* Text Label */}
                 <span className="relative z-10">{item.label}</span>
               </button>
             ))}
 
-            {/* CTA Button */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              // ADDED: onClick to scroll to social section
+              onClick={() => scrollToSection("social")}
               className="ml-6 px-5 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white text-xs font-bold uppercase tracking-wider shadow-lg hover:shadow-cyan-500/25 transition-all"
             >
               Get Started
             </motion.button>
           </div>
 
-          {/* --- MOBILE TOGGLE --- */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden relative z-50 p-2 text-white/80 hover:text-cyan-400 transition-colors"
@@ -121,7 +112,6 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
-      {/* --- MOBILE MENU OVERLAY --- */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -131,7 +121,6 @@ const Navbar = () => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="fixed inset-0 z-40 bg-[#05070d]/95 backdrop-blur-xl md:hidden flex flex-col items-center justify-center space-y-8"
           >
-            {/* Mobile Links */}
             {navItems.map((item, index) => (
               <motion.button
                 key={item.id}
@@ -149,11 +138,12 @@ const Navbar = () => {
               </motion.button>
             ))}
             
-            {/* Mobile CTA */}
             <motion.button
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5 }}
+              // ADDED: onClick to scroll to social section
+              onClick={() => scrollToSection("social")}
               className="mt-8 px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold shadow-lg"
             >
               Get Started
