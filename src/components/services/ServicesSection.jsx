@@ -186,9 +186,3 @@ const ServicesSection = () => {
 };
 
 export default ServicesSection;
-export const navItems = [
-  { label: "Home", id: "home" },
-  { label: "About", id: "about" },
-  { label: "Services", id: "services" },
-  { label: "Contact", id: "contact" },
-];
