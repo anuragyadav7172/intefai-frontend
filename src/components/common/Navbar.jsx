@@ -1,45 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaBars, FaXmark } from "react-icons/fa6"; 
-import { Link } from "react-router-dom";
+import { FaBars, FaXmark } from "react-icons/fa6";
+import { Link, useLocation } from "react-router-dom"; // Import useLocation
 import logo from "@/assets/images/logo.png";
 
 const navItems = [
-  { label: "Home", id: "home",href:"/"},
-  { label: "About", id: "about" , href:"/about"},
-  { label: "Services", id: "services" },
-  // CHANGED: id changed from 'contact' to 'inquiry' to match your new section
-  { label: "Contact", id: "inquiry" }, 
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const Navbar = () => {
-  const [active, setActive] = useState("home");
+  const location = useLocation(); // Hook to get current URL path
+  const [active, setActive] = useState("/");
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const scrollToSection = (id) => {
-    setMobileMenuOpen(false); 
-    const el = document.getElementById(id);
-    if (!el) return;
+  // Update the active tab whenever the URL path changes
+  useEffect(() => {
+    setActive(location.pathname);
+    setMobileMenuOpen(false); // Close mobile menu when page changes
+  }, [location]);
 
-    const yOffset = -80; 
-    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-    window.scrollTo({ top: y, behavior: "smooth" });
-  };
-
+  // Handle Navbar background blur on scroll
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-
-      navItems.forEach((item) => {
-        const section = document.getElementById(item.id);
-        if (!section) return;
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= 150 && rect.bottom >= 150) {
-          setActive(item.id);
-        }
-      });
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -61,66 +49,46 @@ const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           
-          <button
-            onClick={() => scrollToSection("home")}
-            className="relative group z-50"
-          >
+          <Link to="/" className="relative group z-50">
             <div className="absolute -inset-2 bg-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
             <img
               src={logo}
               alt="IntefAI Logo"
               className="relative h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
             />
-          </button>
+          </Link>
 
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
-              item.href ? (
-                <Link
-                  key={item.id}
-                  to={item.href}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300
-                    ${active === item.id ? "text-white" : "text-gray-400 hover:text-white"}
-                  `}
-                >
-                  {active === item.id && (
-                    <motion.div
-                      layoutId="active-pill"
-                      className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                  <span className="relative z-10">{item.label}</span>
-                </Link>
-              ) : (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300
-                    ${active === item.id ? "text-white" : "text-gray-400 hover:text-white"}
-                  `}
-                >
-                  {active === item.id && (
-                    <motion.div
-                      layoutId="active-pill"
-                      className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                  <span className="relative z-10">{item.label}</span>
-                </button>
-              )
+              <Link
+                key={item.label}
+                to={item.href}
+                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300
+                  ${active === item.href ? "text-white" : "text-gray-400 hover:text-white"}
+                `}
+              >
+                {/* The Active Pill Animation */}
+                {active === item.href && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <span className="relative z-10">{item.label}</span>
+              </Link>
             ))}
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              // ADDED: onClick to scroll to social section
-              onClick={() => scrollToSection("social")}
-              className="ml-6 px-5 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white text-xs font-bold uppercase tracking-wider shadow-lg hover:shadow-cyan-500/25 transition-all"
-            >
-              Get Started
-            </motion.button>
+            <Link to="/contact">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="ml-6 px-5 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white text-xs font-bold uppercase tracking-wider shadow-lg hover:shadow-cyan-500/25 transition-all"
+              >
+                Get Started
+              </motion.button>
+            </Link>
           </div>
 
           <button
@@ -132,6 +100,7 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -142,52 +111,38 @@ const Navbar = () => {
             className="fixed inset-0 z-40 bg-[#05070d]/95 backdrop-blur-xl md:hidden flex flex-col items-center justify-center space-y-8"
           >
             {navItems.map((item, index) => (
-              item.href ? (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.1 }}
-                >
-                  <Link
-                    to={item.href}
-                    className={`text-2xl font-bold tracking-wide
-                      ${active === item.id 
-                        ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500" 
-                        : "text-white/60"
-                      }`}
-                  >
-                    {item.label}
-                  </Link>
-                </motion.div>
-              ) : (
-                <motion.button
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.1 }}
-                  onClick={() => scrollToSection(item.id)}
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.1 }}
+              >
+                <Link
+                  to={item.href}
                   className={`text-2xl font-bold tracking-wide
-                    ${active === item.id 
+                    ${active === item.href 
                       ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500" 
                       : "text-white/60"
                     }`}
                 >
                   {item.label}
-                </motion.button>
-              )
+                </Link>
+              </motion.div>
             ))}
             
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5 }}
-              // ADDED: onClick to scroll to social section
-              onClick={() => scrollToSection("social")}
-              className="mt-8 px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold shadow-lg"
+            <motion.div
+               initial={{ opacity: 0, scale: 0.8 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{ delay: 0.5 }}
             >
-              Get Started
-            </motion.button>
+              <Link to="/contact">
+                <button
+                  className="mt-8 px-8 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold shadow-lg"
+                >
+                  Get Started
+                </button>
+              </Link>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
