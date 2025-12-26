@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaXmark } from "react-icons/fa6"; 
+import { Link } from "react-router-dom";
 import logo from "@/assets/images/logo.png";
 
 const navItems = [
-  { label: "Home", id: "home" },
-  { label: "About", id: "about" },
+  { label: "Home", id: "home",href:"/"},
+  { label: "About", id: "about" , href:"/about"},
   { label: "Services", id: "services" },
   // CHANGED: id changed from 'contact' to 'inquiry' to match your new section
   { label: "Contact", id: "inquiry" }, 
@@ -68,28 +69,47 @@ const Navbar = () => {
             <img
               src={logo}
               alt="IntefAI Logo"
-              className="relative h-10 md:h-12 w-auto transition-transform duration-300 group-hover:scale-105"
+              className="relative h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
             />
           </button>
 
           <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300
-                  ${active === item.id ? "text-white" : "text-gray-400 hover:text-white"}
-                `}
-              >
-                {active === item.id && (
-                  <motion.div
-                    layoutId="active-pill"
-                    className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-                <span className="relative z-10">{item.label}</span>
-              </button>
+              item.href ? (
+                <Link
+                  key={item.id}
+                  to={item.href}
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300
+                    ${active === item.id ? "text-white" : "text-gray-400 hover:text-white"}
+                  `}
+                >
+                  {active === item.id && (
+                    <motion.div
+                      layoutId="active-pill"
+                      className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <span className="relative z-10">{item.label}</span>
+                </Link>
+              ) : (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300
+                    ${active === item.id ? "text-white" : "text-gray-400 hover:text-white"}
+                  `}
+                >
+                  {active === item.id && (
+                    <motion.div
+                      layoutId="active-pill"
+                      className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 shadow-[0_0_10px_rgba(6,182,212,0.2)]"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <span className="relative z-10">{item.label}</span>
+                </button>
+              )
             ))}
 
             <motion.button
@@ -122,20 +142,40 @@ const Navbar = () => {
             className="fixed inset-0 z-40 bg-[#05070d]/95 backdrop-blur-xl md:hidden flex flex-col items-center justify-center space-y-8"
           >
             {navItems.map((item, index) => (
-              <motion.button
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + index * 0.1 }}
-                onClick={() => scrollToSection(item.id)}
-                className={`text-2xl font-bold tracking-wide
-                  ${active === item.id 
-                    ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500" 
-                    : "text-white/60"
-                  }`}
-              >
-                {item.label}
-              </motion.button>
+              item.href ? (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + index * 0.1 }}
+                >
+                  <Link
+                    to={item.href}
+                    className={`text-2xl font-bold tracking-wide
+                      ${active === item.id 
+                        ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500" 
+                        : "text-white/60"
+                      }`}
+                  >
+                    {item.label}
+                  </Link>
+                </motion.div>
+              ) : (
+                <motion.button
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + index * 0.1 }}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`text-2xl font-bold tracking-wide
+                    ${active === item.id 
+                      ? "text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500" 
+                      : "text-white/60"
+                    }`}
+                >
+                  {item.label}
+                </motion.button>
+              )
             ))}
             
             <motion.button

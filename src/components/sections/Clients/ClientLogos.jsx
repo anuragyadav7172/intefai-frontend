@@ -22,20 +22,19 @@ const logos = [
 ];
 
 const ClientLogos = () => {
+  // Triple the data to ensure smooth infinite loop
+  const loopLogos = [...logos, ...logos, ...logos];
+
   return (
-    // REDUCED VERTICAL PADDING: py-10 for mobile, py-16 for desktop
     <section className="py-10 md:py-16 bg-[#05070d] border-t border-white/5 relative overflow-hidden">
       
       {/* Background Glow */}
       <div className="absolute inset-0 bg-cyan-900/10 blur-[120px] pointer-events-none" />
 
-      {/* --- COMPACT TEXT SECTION --- */}
-      <div className="max-w-4xl mx-auto px-6 mb-8 md:mb-12 text-center relative z-10">
-        
-        {/* Shorter Drop Line */}
+      {/* --- TEXT SECTION --- */}
+      <div className="max-w-4xl mx-auto px-6 mb-10 md:mb-14 text-center relative z-10">
         <div className="w-px h-8 md:h-12 bg-gradient-to-b from-transparent via-cyan-500 to-transparent mx-auto mb-4 opacity-50" />
 
-        {/* Smaller Glass Badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/30 border border-cyan-500/20 backdrop-blur-sm mb-4 md:mb-6 shadow-[0_0_10px_rgba(6,182,212,0.1)]">
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
           <span className="text-cyan-400 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase">
@@ -43,7 +42,6 @@ const ClientLogos = () => {
           </span>
         </div>
 
-        {/* Adjusted Heading Size */}
         <h3 className="text-3xl md:text-5xl font-bold text-white leading-tight tracking-tight">
           Trusted by <br className="md:hidden" />
           <span className="relative inline-block">
@@ -60,9 +58,10 @@ const ClientLogos = () => {
         <Swiper
           modules={[Autoplay]}
           spaceBetween={30}
-          slidesPerView={3} // Show 3 logos on mobile for compactness
+          slidesPerView={3}
           loop={true}
-          speed={3500}
+          speed={3000}
+          allowTouchMove={true}
           autoplay={{
             delay: 0,
             disableOnInteraction: false,
@@ -76,30 +75,31 @@ const ClientLogos = () => {
           }}
           className="swiper-linear-ease"
         >
-          {logos.map((logo, index) => (
-            // Adjusted padding so hover effect doesn't get cut off
-            <SwiperSlide key={index} className="py-8 px-2">
-               <div className="group relative flex items-center justify-center cursor-pointer">
+          {loopLogos.map((logo, index) => (
+            <SwiperSlide key={`${logo.name}-${index}`} className="py-8 px-2">
+               {/* Increased container height to fit larger logos */}
+               <div className="group relative flex items-center justify-center cursor-pointer h-24 w-full">
                   <img
                     src={logo.url}
                     alt={logo.name}
-                    // REDUCED LOGO HEIGHT: h-12 (mobile) to h-20 (desktop)
-                    className="relative h-12 sm:h-16 md:h-20 w-auto object-contain 
+                    // UPDATED CLASSES:
+                    // 1. Removed 'grayscale' and 'opacity-60' -> Now fully colorful
+                    // 2. Increased Height: h-14 (mobile), h-20 (tablet), h-24 (desktop)
+                    className="relative h-14 sm:h-20 md:h-24 w-auto object-contain 
                                transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]
-                               drop-shadow-[0_4px_6px_rgba(0,0,0,0.5)]
-                               group-hover:-translate-y-2
-                               group-hover:scale-110
-                               group-hover:brightness-110
-                               group-hover:drop-shadow-[0_0_20px_rgba(34,211,238,0.8)]"
+                               drop-shadow-[0_4px_6px_rgba(0,0,0,0.3)]
+                               hover:-translate-y-2
+                               hover:scale-110
+                               hover:drop-shadow-[0_0_25px_rgba(34,211,238,0.6)]"
                   />
                </div>
             </SwiperSlide>
           ))}
         </Swiper>
         
-        {/* Gradient Masks */}
-        <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-[#05070d] via-[#05070d]/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-[#05070d] via-[#05070d]/80 to-transparent z-10 pointer-events-none" />
+        {/* Side Fades */}
+        <div className="absolute inset-y-0 left-0 w-12 md:w-32 bg-gradient-to-r from-[#05070d] via-[#05070d]/90 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-12 md:w-32 bg-gradient-to-l from-[#05070d] via-[#05070d]/90 to-transparent z-10 pointer-events-none" />
       </div>
 
       <style>{`

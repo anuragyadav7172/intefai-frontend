@@ -27,10 +27,18 @@ const StatItem = ({ value, label, suffix = "+", delay }) => {
     }
   }, [count, value, isInView, delay]);
 
+  // --- FIXED CODE SECTION START ---
   // Update text state
   useEffect(() => {
-    return rounded.onChange((v) => setDisplayValue(v));
+    // The syntax .onChange(callback) is deprecated.
+    // We switched to .on("change", callback) which is the new standard.
+    const unsubscribe = rounded.on("change", (v) => {
+      setDisplayValue(v);
+    });
+    
+    return () => unsubscribe();
   }, [rounded]);
+  // --- FIXED CODE SECTION END ---
 
   return (
     <motion.div
