@@ -1,100 +1,93 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 
-// --- IMAGE IMPORTS ---
+// --- ASSETS ---
 const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
-// --- 3D CARD COMPONENT ---
-const TeamCard = ({ name, role, image, linkedin, index }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
+// --- TEAM DATA ---
+const team = [
+  { name: "Lakhan Jadam", role: "Co-Founder & CEO", image: defaultAvatar, linkedin: "#" },
+  { name: "Dharmesh Thakur", role: "Co-Founder & CEO", image: defaultAvatar, linkedin: "#" },
+  { name: "Sachin Gupta", role: "Co-Founder & CEO", image: defaultAvatar, linkedin: "#" },
+  { name: "Mr Sanjay Dhakad", role: "Full Stack Developer", image: defaultAvatar, linkedin: "#" },
+  { name: "Akhil Deshmukh", role: "MERN Stack Developer", image: defaultAvatar, linkedin: "#" },
+  { name: "Sandeep Rajput", role: "MERN Stack Developer", image: defaultAvatar, linkedin: "#" },
+  { name: "Anurag Yadav", role: "Full Stack Intern", image: defaultAvatar, linkedin: "#" }
+];
 
-  const mouseX = useSpring(x, { stiffness: 400, damping: 40 });
-  const mouseY = useSpring(y, { stiffness: 400, damping: 40 });
+// --- CARD COMPONENT ---
+const TeamCard = ({ name, role, image, linkedin }) => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  function onMouseMove({ currentTarget, clientX, clientY }) {
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    const xPct = (clientX - left) / width - 0.5;
-    const yPct = (clientY - top) / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
+  function handleMouseMove({ currentTarget, clientX, clientY }) {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
   }
-
-  function onMouseLeave() {
-    x.set(0);
-    y.set(0);
-  }
-
-  const rotateX = useTransform(mouseY, [-0.5, 0.5], [7, -7]);
-  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-7, 7]);
 
   return (
     <motion.div
-      // flex-shrink-0 is CRITICAL for horizontal scrolling to prevent squishing
-      className="relative flex-shrink-0 w-[300px] md:w-[340px] h-[450px] md:h-[480px] rounded-[24px] bg-slate-900/40 backdrop-blur-xl border border-white/10 group perspective-1000 cursor-grab active:cursor-grabbing"
-      onMouseMove={onMouseMove}
-      onMouseLeave={onMouseLeave}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      whileTap={{ scale: 0.98 }} // Subtle press effect when dragging starts
+      className="group relative flex-shrink-0 w-[85vw] sm:w-[300px] md:w-[280px] lg:w-[300px] h-[400px] rounded-3xl bg-slate-900 border border-white/10 overflow-hidden snap-center"
+      onMouseMove={handleMouseMove}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true, margin: "-50px" }}
     >
-      {/* Dynamic Gradient Border */}
-      <div className="absolute -inset-[1px] rounded-[24px] bg-gradient-to-br from-cyan-500/20 via-blue-500/0 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
-
-      {/* Card Body */}
-      <div className="absolute inset-0 rounded-[24px] overflow-hidden bg-gradient-to-b from-white/[0.08] to-transparent p-6 flex flex-col items-center select-none">
+      {/* 1. HOVER SPOTLIGHT EFFECT */}
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
+        style={{
+          background: useMotionTemplate`
+            radial-gradient(
+              650px circle at ${mouseX}px ${mouseY}px,
+              rgba(6, 182, 212, 0.15),
+              transparent 80%
+            )
+          `,
+        }}
+      />
+      
+      {/* 2. CARD CONTENT */}
+      <div className="absolute inset-[1px] rounded-3xl bg-slate-950/90 backdrop-blur-sm flex flex-col items-center p-6 transition-colors duration-500">
         
-        {/* Shine highlight */}
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+        {/* Glow behind image */}
+        <div className="absolute top-10 w-32 h-32 bg-cyan-500/30 rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-        {/* 3D Content Container */}
-        <div 
-          style={{ transform: "translateZ(30px)" }}
-          className="relative z-10 flex flex-col items-center w-full h-full"
-        >
-            {/* Image Section */}
-            <div className="relative mt-4 mb-6 group-hover:-translate-y-2 transition-transform duration-500 ease-out pointer-events-none">
-                <div className="absolute inset-0 rounded-full bg-cyan-500 blur-[20px] opacity-20 group-hover:opacity-60 transition-opacity duration-500" />
-                <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-full p-[3px] bg-gradient-to-b from-cyan-300 via-blue-500 to-transparent">
-                    <div className="w-full h-full rounded-full overflow-hidden bg-slate-950">
-                        <img 
-                            src={image} 
-                            alt={name} 
-                            className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500"
-                            draggable="false" // Prevent browser image drag
-                        />
-                    </div>
-                </div>
+        {/* Image Container */}
+        <div className="relative z-10 mt-4 mb-6">
+            <div className="w-28 h-28 md:w-32 md:h-32 rounded-full p-1 bg-gradient-to-br from-white/10 to-white/5 group-hover:from-cyan-400 group-hover:to-blue-600 transition-colors duration-500">
+                <img 
+                    src={image} 
+                    alt={name} 
+                    className="w-full h-full rounded-full object-cover grayscale group-hover:grayscale-0 transform group-hover:scale-105 transition-all duration-500 ease-out"
+                />
             </div>
+        </div>
 
-            {/* Typography */}
-            <div className="text-center space-y-2 mt-2 pointer-events-none">
-                <h3 className="text-2xl font-bold text-white tracking-tight group-hover:text-cyan-50 transition-colors">
-                    {name}
-                </h3>
-                <div className="inline-block px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20">
-                    <p className="text-xs font-semibold text-cyan-400 tracking-wider uppercase">
-                        {role}
-                    </p>
-                </div>
-            </div>
+        {/* Text Details */}
+        <div className="text-center z-10 relative">
+          <h3 className="text-xl font-bold text-white group-hover:text-cyan-50 transition-colors duration-300">
+            {name}
+          </h3>
+          <p className="text-sm font-medium text-cyan-500/70 mt-1 uppercase tracking-wider">
+            {role}
+          </p>
+        </div>
 
-            {/* Interaction Area */}
-            <div className="mt-auto w-full flex flex-col items-center pb-4">
-                <div className="w-8 h-[2px] bg-white/20 rounded-full mb-6 group-hover:w-24 group-hover:bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500" />
-                
-                {/* LinkedIn Button */}
-                <a 
-                    href={linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-6 py-2 rounded-full bg-blue-600/90 hover:bg-blue-500 text-white text-sm font-medium opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg shadow-blue-900/50"
-                    // Prevent drag click propagation
-                    onPointerDown={(e) => e.stopPropagation()}
-                >
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                    <span>Connect</span>
-                </a>
-            </div>
+        {/* Decorative Divider */}
+        <div className="w-12 h-[1px] bg-white/10 my-6 group-hover:w-full group-hover:bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent transition-all duration-500" />
+
+        {/* LinkedIn Button (Slides up on Hover) */}
+        <div className="mt-auto overflow-hidden">
+            <a 
+                href={linkedin}
+                className="flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 hover:bg-cyan-500/20 border border-white/10 hover:border-cyan-500/50 text-white text-sm transition-all duration-300 translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+            >
+                <span className="font-semibold">Connect</span>
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
         </div>
       </div>
     </motion.div>
@@ -103,71 +96,78 @@ const TeamCard = ({ name, role, image, linkedin, index }) => {
 
 // --- MAIN SECTION ---
 const TeamSection = () => {
-  const [width, setWidth] = useState(0);
-  const carousel = useRef();
+  const scrollContainerRef = useRef(null);
 
-  useEffect(() => {
-    // Calculate the scrollable width: Total content width - Visible window width
-    setWidth(carousel.current.scrollWidth - carousel.current.offsetWidth);
-  }, []);
-
-  const team = [
-    { name: "Lakhan Jadam", role: "Co-Founder & CEO", image: defaultAvatar, linkedin: "https://www.linkedin.com/in/lakhan-jadam-91a775131/" },
-    { name: "Dharmesh Thakur", role: "Co-Founder & CEO", image: defaultAvatar, linkedin: "https://www.linkedin.com/feed/" },
-    { name: "Sachin Gupta", role: "Co-Founder & CEO", image: defaultAvatar, linkedin: "https://www.linkedin.com/feed/" },
-    { name: "Mr Sanjay Dhakad", role: "Full Stack Developer", image: defaultAvatar, linkedin: "https://www.linkedin.com/in/mr-sanjay-dhakad-3a736b320/" },
-    { name: "Akhil Deshmukh", role: "MERN Stack Developer", image: defaultAvatar, linkedin: "https://www.linkedin.com/in/akhil-deshmukh11/" },
-    { name: "Sandeep Rajput", role: "MERN Stack Developer", image: defaultAvatar, linkedin: "https://www.linkedin.com/company/intefai-it-solutions/" },
-    { name: "Anurag Yadav", role: "Full Stack Intern", image: defaultAvatar, linkedin: "https://www.linkedin.com/in/anurag-yadav7489/" }
-  ];
+  // Scroll Handler for Buttons
+  const scroll = (direction) => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 320; // Approx card width + gap
+      scrollContainerRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth"
+      });
+    }
+  };
 
   return (
-    <section className="relative py-24 overflow-hidden">
-        
-      {/* Background Atmosphere */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] pointer-events-none mix-blend-screen" />
+    <section className="relative py-20 bg-slate-950 overflow-hidden">
+      
+      {/* Background Ambience */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-500/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px]" />
+      </div>
 
-      <div className="relative z-10">
+      <div className="container mx-auto px-4 relative z-10">
         
-        {/* Header */}
-        <div className="text-center mb-12 px-4">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-bold text-white mb-6"
-          >
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Masterminds</span>
-          </motion.h2>
-          <p className="text-cyan-200/60 text-sm tracking-widest uppercase">
-            &larr; Drag to Explore &rarr;
-          </p>
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+          <div className="max-w-xl">
+            <motion.h2 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="text-3xl md:text-5xl font-bold text-white mb-4"
+            >
+              Meet the <span className="text-cyan-400">Masterminds</span>
+            </motion.h2>
+            <p className="text-slate-400 text-sm md:text-base">
+                The passionate team of developers and innovators driving our success.
+            </p>
+          </div>
+
+          {/* Navigation Buttons (Visible on Desktop) */}
+          <div className="hidden md:flex gap-4">
+            <button 
+                onClick={() => scroll("left")}
+                className="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-cyan-500 hover:border-cyan-500 text-white transition-all active:scale-95"
+            >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button 
+                onClick={() => scroll("right")}
+                className="p-3 rounded-full border border-white/10 bg-white/5 hover:bg-cyan-500 hover:border-cyan-500 text-white transition-all active:scale-95"
+            >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </div>
         </div>
 
-        {/* CAROUSEL CONTAINER
-            overflow-hidden ensures cards don't spill out of the section
+        {/* SCROLL CONTAINER 
+            snap-x: Enables snapping
+            overflow-x-auto: Enables native scrolling
+            scrollbar-hide: Optional (you can add utility to hide scrollbar)
         */}
-        <div className="w-full overflow-hidden">
-            <motion.div 
-                ref={carousel} 
-                className="cursor-grab overflow-hidden active:cursor-grabbing px-4 md:px-20 py-10"
-                whileTap={{ cursor: "grabbing" }}
-            >
-                {/* DRAGGABLE TRACK 
-                   drag="x" enables horizontal dragging
-                   dragConstraints ensures you can't drag past the first or last item
-                */}
-                <motion.div 
-                    drag="x" 
-                    dragConstraints={{ right: 0, left: -width }}
-                    className="flex gap-8 md:gap-12 w-max"
-                >
-                    {team.map((member, index) => (
-                        <TeamCard key={index} index={index} {...member} />
-                    ))}
-                </motion.div>
-            </motion.div>
+        <div 
+            ref={scrollContainerRef}
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 px-4 md:px-0 scrollbar-hide"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }} // Hide scrollbar for Firefox/IE
+        >
+          {team.map((member, index) => (
+            <TeamCard key={index} {...member} />
+          ))}
+          
+          {/* Spacer to allow last card to be seen fully on mobile */}
+          <div className="w-1 shrink-0" /> 
         </div>
 
       </div>

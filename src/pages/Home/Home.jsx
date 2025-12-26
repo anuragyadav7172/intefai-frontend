@@ -4,6 +4,8 @@ import DynamicStats from "../../components/sections/Hero/DynamicStats";
 import AboutSection from "../../components/sections/About/AboutSection";
 import ServicesSection from "../../components/services/ServicesSection";
 import TeamSection from "../../components/sections/Team/TeamSection";
+import GallerySection from "../../components/sections/Gallery/GallerySection";
+import ClientLogos from "../../components/sections/Clients/ClientLogos";
 import SocialSection from "../../components/Social/SocialSection.jsx";
 import InquirySection from "../../components/sections/Inquiry/InquirySection";
 const Home = () => {
@@ -13,7 +15,9 @@ const Home = () => {
       <DynamicStats />
       <AboutSection />
       <ServicesSection />
+      <GallerySection />
       <TeamSection />
+      <ClientLogos />
       <SocialSection />
       <InquirySection />
     </main>
