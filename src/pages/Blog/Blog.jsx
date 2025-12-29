@@ -346,18 +346,6 @@ const allBlogPosts = [
   }
 ];
 
-// Generate categories with dynamic counts based on your provided numbers
-const getCategoriesWithCounts = () => {
-  return [
-    { id: "all", name: "All Posts", icon: FiGlobe, count: 10 },
-    { id: "digital-marketing", name: "Digital Marketing", icon: FiTarget, count: 3 },
-    { id: "seo-content", name: "SEO & Content", icon: FiSearch, count: 4 },
-    { id: "social-media", name: "Social Media", icon: FiUsers, count: 3 },
-    { id: "ecommerce", name: "E-commerce Growth", icon: FiShoppingBag, count: 1 },
-    { id: "ai-tech", name: "AI & Technology", icon: FiCpu, count: 1 }
-  ];
-};
-
 // 3D Card Component
 const ThreeDCard = ({ children, intensity = 10, scale = 1.02, className = "" }) => {
   const x = useMotionValue(0);
@@ -564,7 +552,7 @@ const BlogHero = ({ onExploreClick }) => {
         />
       </motion.div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-20">
+     <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-24 sm:pt-26 md:pt-28 pb-12 md:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Left Content - Floating Text Layers */}
           <motion.div
@@ -740,131 +728,6 @@ const BlogHero = ({ onExploreClick }) => {
   );
 };
 
-// Sticky Filter Navigation
-const FilterNav = ({ activeCategory, setActiveCategory, onViewAll }) => {
-  const [isSticky, setIsSticky] = useState(false);
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const categories = getCategoriesWithCounts();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 100);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: isSticky ? 0 : -100 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl ${
-          isSticky 
-            ? "bg-gray-900/80 border-b border-white/10" 
-            : "bg-transparent"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-14 md:h-16">
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setShowMobileMenu(!showMobileMenu)}
-              className="md:hidden p-2 rounded-lg bg-white/5 border border-white/10"
-            >
-              <FiList className="text-white text-xl" />
-            </button>
-
-            {/* Categories - Desktop */}
-            <div className="hidden md:flex items-center gap-2 overflow-x-auto">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full transition-all whitespace-nowrap ${
-                    activeCategory === category.id
-                      ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
-                      : "bg-white/5 text-gray-300 hover:bg-white/10"
-                  }`}
-                >
-                  <category.icon className="text-sm md:text-base" />
-                  <span className="text-sm">{category.name}</span>
-                  <span className="text-xs opacity-75">({category.count})</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Search */}
-            <div className="relative flex-1 md:flex-none md:w-64">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search posts..."
-                className="w-full pl-9 md:pl-10 pr-3 md:pr-4 py-1.5 md:py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500/50 text-sm md:text-base"
-              />
-            </div>
-
-            {/* View All Button */}
-            <button
-              onClick={onViewAll}
-              className="hidden md:flex items-center gap-2 ml-4 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 text-cyan-400 hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 transition-all"
-            >
-              View All
-              <FiArrowRight />
-            </button>
-          </div>
-        </div>
-      </motion.nav>
-
-      {/* Mobile Menu */}
-      {showMobileMenu && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="fixed top-14 left-0 right-0 z-40 bg-gray-900/95 backdrop-blur-xl border-b border-white/10 md:hidden"
-        >
-          <div className="p-4">
-            <div className="space-y-2">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => {
-                    setActiveCategory(category.id);
-                    setShowMobileMenu(false);
-                  }}
-                  className={`flex items-center justify-between w-full px-4 py-3 rounded-lg transition-all ${
-                    activeCategory === category.id
-                      ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
-                      : "bg-white/5 text-gray-300 hover:bg-white/10"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <category.icon />
-                    <span>{category.name}</span>
-                  </div>
-                  <span className="text-xs opacity-75">({category.count})</span>
-                </button>
-              ))}
-            </div>
-            <button
-              onClick={() => {
-                onViewAll();
-                setShowMobileMenu(false);
-              }}
-              className="w-full mt-4 px-4 py-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center gap-2"
-            >
-              View All Posts
-              <FiArrowRight />
-            </button>
-          </div>
-        </motion.div>
-      )}
-    </>
-  );
-};
-
 // Newsletter Section
 const NewsletterCTA = () => {
   const [email, setEmail] = useState("");
@@ -976,31 +839,12 @@ const BlogListing = ({ posts, onLoadMore, hasMore, onPostClick }) => {
 // Main Blog Component
 const Blog = () => {
   const navigate = useNavigate();
-  const { category } = useParams();
-  const [activeCategory, setActiveCategory] = useState(category || "all");
   const [displayedPosts, setDisplayedPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 9;
-  const categories = getCategoriesWithCounts();
 
-  // Filter posts based on active category
-  const filteredPosts = activeCategory === "all" 
-    ? allBlogPosts 
-    : allBlogPosts.filter(post => {
-        if (activeCategory === "digital-marketing") return post.category === "Digital Marketing";
-        if (activeCategory === "seo-content") return post.category === "SEO & Content";
-        if (activeCategory === "social-media") return post.category === "Social Media";
-        if (activeCategory === "ecommerce") return post.category === "E-commerce Growth";
-        if (activeCategory === "ai-tech") return post.category === "AI & Technology";
-        return true;
-      });
-
-  // Handle category change
-  const handleCategoryChange = (categoryId) => {
-    setActiveCategory(categoryId);
-    setCurrentPage(1);
-    navigate(`/blog${categoryId === 'all' ? '' : `/${categoryId}`}`);
-  };
+  // All posts are shown (no category filtering)
+  const filteredPosts = allBlogPosts;
 
   // Handle post click
   const handlePostClick = (postId) => {
@@ -1012,15 +856,9 @@ const Blog = () => {
     setCurrentPage(prev => prev + 1);
   };
 
-  // Handle view all click
-  const handleViewAll = () => {
-    handleCategoryChange('all');
-    window.scrollTo({ top: document.getElementById('blog-listing')?.offsetTop - 100 || 0, behavior: 'smooth' });
-  };
-
   // Handle explore latest posts
   const handleExploreLatest = () => {
-    handleViewAll();
+    window.scrollTo({ top: document.getElementById('blog-listing')?.offsetTop - 100 || 0, behavior: 'smooth' });
   };
 
   // Update displayed posts when page changes
@@ -1030,11 +868,6 @@ const Blog = () => {
     setDisplayedPosts(filteredPosts.slice(startIndex, endIndex));
   }, [currentPage, filteredPosts]);
 
-  // Reset to first page when category changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [activeCategory]);
-
   const hasMorePosts = displayedPosts.length < filteredPosts.length;
 
   return (
@@ -1042,21 +875,16 @@ const Blog = () => {
       {/* Hero Section */}
       <BlogHero onExploreClick={handleExploreLatest} />
 
-      {/* Filter Navigation */}
-      <FilterNav 
-        activeCategory={activeCategory} 
-        setActiveCategory={handleCategoryChange}
-        onViewAll={handleViewAll}
-      />
+      {/* NO FILTER NAVIGATION - Removed as requested */}
 
-      <div className="pt-20 md:pt-24">
+      <div className="pt-8 md:pt-12">
         {/* Featured Posts */}
         <section className="py-8 md:py-16">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 md:mb-8 gap-4">
               <h2 className="text-2xl md:text-3xl font-bold text-white">Featured Articles</h2>
               <button 
-                onClick={handleViewAll}
+                onClick={handleExploreLatest}
                 className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 text-sm md:text-base"
               >
                 View All <FiArrowRight />
@@ -1070,7 +898,7 @@ const Blog = () => {
           </div>
         </section>
 
-        {/* All Posts - NO TRENDING SLIDER (removed as requested) */}
+        {/* All Posts */}
         <div id="blog-listing">
           <BlogListing 
             posts={displayedPosts}
