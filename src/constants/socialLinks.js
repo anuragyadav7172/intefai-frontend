@@ -16,7 +16,7 @@ export const socialLinks = [
   {
     id: "linkedin",
     name: "LinkedIn",
-    url: "https://www.linkedin.com/company/intefai",
+    url: "https://www.linkedin.com/company/intefai-it-solutions/",
     icon: FaLinkedinIn,
     color: "from-blue-600 to-blue-400",
     image: linkedinBg, // Added image
@@ -24,7 +24,7 @@ export const socialLinks = [
   {
     id: "instagram",
     name: "Instagram",
-    url: "https://www.instagram.com/intefai",
+    url: "https://www.instagram.com/intefai_digital?igsh=MTVwYXJ0NWZtMjFkNA==",
     icon: FaInstagram,
     color: "from-pink-500 to-orange-400",
     image: instaBg, // Added image

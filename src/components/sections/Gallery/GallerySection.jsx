@@ -17,15 +17,15 @@ import office10 from "../../../assets/images/gallery/office-11.png";
 // --- DATA ---
 const galleryItems = [
   { id: 1, title: "IntefAI Headquarters", category: "Our Space", src: office1, size: "large" },
-  { id: 2, title: "Collaborative Zone", category: "Innovation", src: office2, size: "tall" },
+  { id: 2, title: "Collaborative Zone", category: "Innovation", src: office2, size: "wide" },
   { id: 3, title: "Tech Stack Visuals", category: "Architecture", src: office3, size: "normal" },
   { id: 4, title: "Workstation Setup", category: "Efficiency", src: office4, size: "normal" },
   { id: 5, title: "Meeting Lounge", category: "Strategy", src: office5, size: "wide" },
   { id: 6, title: "Data Center View", category: "Infrastructure", src: office6, size: "normal" },
   { id: 7, title: "Creative Hub", category: "Design", src: office7, size: "normal" },
-  { id: 8, title: "Breakout Room", category: "Culture", src: office8, size: "normal" },
-  { id: 9, title: "Focus Pods", category: "Engineering", src: office9, size: "normal" },
-  { id: 10, title: "Client Suite", category: "Relations", src: office10, size: "wide" },
+  { id: 8, title: "Breakout Room", category: "Our Space", src: office8, size: "normal" },
+  { id: 9, title: "Focus Pods", category: "Our Space", src: office9, size: "normal" },
+  { id: 10, title: "Client Suite", category: "Our Space", src: office10, size: "wide" },
 ];
 
 const categories = ["All", "Our Space", "Innovation", "Design", "Infrastructure"];

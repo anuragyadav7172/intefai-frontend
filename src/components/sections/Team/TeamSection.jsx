@@ -1,18 +1,63 @@
 import React, { useRef } from "react";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 
-// --- ASSETS ---
+// --- IMPORT LOCAL IMAGES ---
+// Note: Ensure these file names match exactly what is in your folder (case-sensitive)
+import lakhanImg from "../../../assets/images/Team/Lakhan Jadam.png";
+import dharmeshImg from "../../../assets/images/Team/Dharmesh Thakur.png";
+import sachinImg from "../../../assets/images/Team/Sachin Gupta.png";
+import sanjayImg from "../../../assets/images/Team/Sanjay Dhakad.png";
+import akhilImg from "../../../assets/images/Team/Akhil Deshmukh.jpeg";
+import sandeepImg from "../../../assets/images/Team/Sandeep Rajput.jpeg";
+import anuragImg from "../../../assets/images/Team/Anurag Yadav.jpg";
+
+// Fallback image (in case a local image is missing, you can use this)
 const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
 // --- TEAM DATA ---
 const team = [
-  { name: "Lakhan Jadam", role: "Co-Founder & CEO", image: defaultAvatar, linkedin: "#" },
-  { name: "Dharmesh Thakur", role: "Co-Founder & CEO", image: defaultAvatar, linkedin: "#" },
-  { name: "Sachin Gupta", role: "Co-Founder & CEO", image: defaultAvatar, linkedin: "#" },
-  { name: "Mr Sanjay Dhakad", role: "Full Stack Developer", image: defaultAvatar, linkedin: "#" },
-  { name: "Akhil Deshmukh", role: "MERN Stack Developer", image: defaultAvatar, linkedin: "#" },
-  { name: "Sandeep Rajput", role: "MERN Stack Developer", image: defaultAvatar, linkedin: "#" },
-  { name: "Anurag Yadav", role: "Full Stack Intern", image: defaultAvatar, linkedin: "#" }
+  { 
+    name: "Lakhan Jadam", 
+    role: "Co-Founder & CEO", 
+    image: lakhanImg, // Using the imported variable
+    linkedin: "#" 
+  },
+  { 
+    name: "Dharmesh Thakur", 
+    role: "Co-Founder & CEO", 
+    image: dharmeshImg, 
+    linkedin: "#" 
+  },
+  { 
+    name: "Sachin Gupta", 
+    role: "Co-Founder & CEO", 
+    image: sachinImg, 
+    linkedin: "#" 
+  },
+  { 
+    name: "Mr Sanjay Dhakad", 
+    role: "Full Stack Developer", 
+    image: sanjayImg, 
+    linkedin: "#" 
+  },
+  { 
+    name: "Akhil Deshmukh", 
+    role: "MERN Stack Developer", 
+    image: akhilImg, 
+    linkedin: "#" 
+  },
+  { 
+    name: "Sandeep Rajput", 
+    role: "MERN Stack Developer", 
+    image: sandeepImg, 
+    linkedin: "#" 
+  },
+  { 
+    name: "Anurag Yadav", 
+    role: "Full Stack Intern", 
+    image: anuragImg, 
+    linkedin: "#" 
+  }
 ];
 
 // --- CARD COMPONENT ---

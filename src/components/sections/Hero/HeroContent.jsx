@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 // You can define the badge here or import it if you have a separate file
 const HeroBadge = () => (
@@ -20,6 +21,16 @@ const HeroBadge = () => (
 );
 
 const HeroContent = () => {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate('/contact');
+  };
+
+  const handleViewServices = () => {
+    navigate('/services');
+  };
+
   return (
     <div className="flex-1 w-full flex flex-col items-center lg:items-start text-center lg:text-left">
       
@@ -54,14 +65,20 @@ const HeroContent = () => {
         transition={{ duration: 0.5, delay: 0.6 }}
         className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
       >
-        <button className="w-full sm:w-auto relative group px-8 py-4 rounded-full overflow-hidden font-bold text-black bg-white transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(34,211,238,0.5)]">
+        <button 
+          onClick={handleGetStarted}
+          className="w-full sm:w-auto relative group px-8 py-4 rounded-full overflow-hidden font-bold text-black bg-white transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(34,211,238,0.5)]"
+        >
           <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <span className="relative group-hover:text-white transition-colors duration-300">
             Get Started Now
           </span>
         </button>
 
-        <button className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/10 text-white font-bold hover:bg-white/5 transition-colors active:scale-95 backdrop-blur-sm">
+        <button 
+          onClick={handleViewServices}
+          className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/10 text-white font-bold hover:bg-white/5 transition-colors active:scale-95 backdrop-blur-sm"
+        >
           View Services
         </button>
       </motion.div>

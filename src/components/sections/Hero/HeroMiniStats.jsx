@@ -30,7 +30,7 @@ const HeroMiniStats = () => {
       id: 3, 
       icon: <FaInstagram />, 
       label: "Instagram", 
-      href: "https://instagram.com",
+      href: "https://www.instagram.com/intefai_digital?igsh=MTVwYXJ0NWZtMjFkNA==",
       // Instagram gradient background
       color: "group-hover:bg-gradient-to-tr group-hover:from-yellow-500 group-hover:via-red-500 group-hover:to-purple-500 group-hover:border-red-500",
       shadow: "group-hover:shadow-[0_0_20px_rgba(236,72,153,0.5)]"

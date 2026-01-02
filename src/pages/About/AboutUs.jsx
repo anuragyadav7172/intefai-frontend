@@ -7,6 +7,16 @@ import {
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
+import office1 from "../../assets/images/gallery/office-1.jpg";
+import office2 from "../../assets/images/gallery/office-2.jpg";
+import office3 from "../../assets/images/gallery/office-3.jpg";
+import office4 from "../../assets/images/gallery/office-4.jpg";
+import office5 from "../../assets/images/gallery/office-5.jpg";
+import office6 from "../../assets/images/gallery/office-6.png";
+import office7 from "../../assets/images/gallery/office-7.png";
+import office8 from "../../assets/images/gallery/office-8.png";
+import office9 from "../../assets/images/gallery/office-9.png";
+import office10 from "../../assets/images/gallery/office-11.png";
 // ==========================================
 //  1. DATA & CONSTANTS
 // ==========================================
@@ -57,21 +67,21 @@ const founders = [
     role: "CEO & Co-Founder",
     desc: "Driving force behind IntefAI's strategic vision. Expert in AI-driven solutions and scalable business systems.",
     imageColor: "from-cyan-400 to-blue-600",
-    imageSrc: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
+    imageSrc: office8 
   },
   {
     name: "Dharmesh Thakur",
     role: "Co-Founder & CEO",
     desc: "Tech architecture and operations leader. Aligns technology with marketing outcomes for peak performance.",
     imageColor: "from-purple-400 to-pink-600",
-    imageSrc: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+    imageSrc: office9
   },
   {
     name: "Sachin Gupta",
     role: "Co-Founder & CEO",
     desc: "Product development and automation specialist. Ensures solutions remain future-ready and results-oriented.",
     imageColor: "from-emerald-400 to-cyan-600",
-    imageSrc: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+    imageSrc: office7
   },
 ];
 
@@ -81,71 +91,70 @@ const galleryItems = [
     id: 1, 
     title: "IntefAI Headquarters", 
     category: "Our Space", 
-    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop", 
+    src: office1, 
     size: "large" 
   },
   { 
     id: 2, 
     title: "Collaborative Zone", 
     category: "Innovation", 
-    src: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop", 
-    size: "tall" 
+    src: office2, 
+    size: "wide" 
   },
   { 
     id: 3, 
     title: "Tech Stack Visuals", 
     category: "Architecture", 
-    src: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=2070&auto=format&fit=crop", 
+    src: office3, 
     size: "normal" 
   },
   { 
     id: 4, 
     title: "Workstation Setup", 
     category: "Efficiency", 
-    src: "https://images.unsplash.com/photo-1581094794321-9691cca2c5c0?q=80&w=2069&auto=format&fit=crop", 
+    src: office4, 
     size: "normal" 
   },
   { 
     id: 5, 
     title: "Meeting Lounge", 
     category: "Strategy", 
-    src: "https://images.unsplash.com/photo-1568992688065-536aad8a12f6?q=80&w=2069&auto=format&fit=crop", 
+    src:  office5, 
     size: "wide" 
   },
   { 
     id: 6, 
     title: "Data Center View", 
     category: "Infrastructure", 
-    src: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2074&auto=format&fit=crop", 
+    src: office6, 
     size: "normal" 
   },
   { 
     id: 7, 
     title: "Creative Hub", 
     category: "Design", 
-    src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop", 
+    src: office7, 
     size: "normal" 
   },
   { 
     id: 8, 
     title: "Breakout Room", 
     category: "Culture", 
-    src: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop", 
+    src: office8, 
     size: "normal" 
   },
   { 
     id: 9, 
     title: "Focus Pods", 
     category: "Engineering", 
-    src: "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=2069&auto=format&fit=crop", 
+    src: office9, 
     size: "normal" 
   },
   { 
     id: 10, 
     title: "Client Suite", 
     category: "Relations", 
-    src: "https://images.unsplash.com/photo-1568992688065-536aad8a12f6?q=80&w=2069&auto=format&fit=crop", 
-    size: "wide" 
+    src: office10,
   },
 ];
 
@@ -523,7 +532,7 @@ const OptimizedHeroSection = () => {
             <div className="absolute inset-0 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-tr from-white/5 via-transparent to-white/10" />
 
             <img 
-              src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" 
+              src={office4} 
               alt="IntefAI Team" 
               className="absolute inset-0 w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 ease-out"
             />
@@ -584,7 +593,7 @@ const AboutUs = () => {
              <div className="relative w-full h-full rounded-[30px] overflow-hidden border border-white/10 shadow-2xl bg-[#0a0f1c] group">
                 
                 <img 
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" 
+                  src={office2} 
                   alt="Who We Are" 
                   className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
                 />
@@ -608,7 +617,7 @@ const AboutUs = () => {
              <div className="relative w-full h-full rounded-[30px] overflow-hidden border border-white/10 shadow-2xl bg-[#0a0f1c] group">
                 
                 <img 
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" 
+                  src={office6}
                   alt="Our Vision" 
                   className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
                 />

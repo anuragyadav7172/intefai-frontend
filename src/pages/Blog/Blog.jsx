@@ -43,7 +43,10 @@ import blog8 from "@/assets/images/blog/blog8.png";
 import blog9 from "@/assets/images/blog/blog9.png";
 import blog10 from "@/assets/images/blog/blog10.png";
 
-// Enhanced Blog Data with local images
+// ==============================================
+// BLOG DATA SECTION
+// ==============================================
+
 const allBlogPosts = [
   {
     id: "ai-revolution-2024",
@@ -346,7 +349,10 @@ const allBlogPosts = [
   }
 ];
 
-// 3D Card Component
+// ==============================================
+// 3D CARD COMPONENT SECTION
+// ==============================================
+
 const ThreeDCard = ({ children, intensity = 10, scale = 1.02, className = "" }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -391,7 +397,10 @@ const ThreeDCard = ({ children, intensity = 10, scale = 1.02, className = "" }) 
   );
 };
 
-// Blog Card Component
+// ==============================================
+// BLOG CARD COMPONENT SECTION
+// ==============================================
+
 const BlogCard = ({ post, variant = "default", onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const ref = useRef(null);
@@ -509,7 +518,10 @@ const BlogCard = ({ post, variant = "default", onClick }) => {
   );
 };
 
-// Hero Section
+// ==============================================
+// HERO SECTION SECTION
+// ==============================================
+
 const BlogHero = ({ onExploreClick }) => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 100]);
@@ -552,7 +564,7 @@ const BlogHero = ({ onExploreClick }) => {
         />
       </motion.div>
 
-     <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-24 sm:pt-26 md:pt-28 pb-12 md:pb-20">
+     <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-24 sm:pt-28 md:pt-28 pb-12 md:pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Left Content - Floating Text Layers */}
           <motion.div
@@ -728,7 +740,53 @@ const BlogHero = ({ onExploreClick }) => {
   );
 };
 
-// Newsletter Section
+// ==============================================
+// BLOG LISTING COMPONENT SECTION
+// ==============================================
+
+const BlogListing = ({ posts, onLoadMore, hasMore, onPostClick }) => {
+  return (
+    <section className="py-8 md:py-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 md:mb-8 gap-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-white">Latest Articles</h2>
+          <div className="flex items-center gap-2 md:gap-4">
+            <button className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm">
+              <FiFilter /> Filter
+            </button>
+            <button className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm">
+              <FiTag /> Tags
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+          {posts.map((post) => (
+            <BlogCard key={post.id} post={post} onClick={onPostClick} />
+          ))}
+        </div>
+
+        {/* Load More */}
+        {hasMore && (
+          <div className="text-center mt-8 md:mt-12">
+            <button 
+              onClick={onLoadMore}
+              className="group px-6 md:px-8 py-2.5 md:py-3 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 text-cyan-400 font-bold hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 transition-all text-sm md:text-base"
+            >
+              Load More Posts
+              <FiArrowRight className="inline-block ml-2 group-hover:translate-x-2 transition-transform" />
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// ==============================================
+// NEWSLETTER SECTION (MOVED TO END OF PAGE)
+// ==============================================
+
 const NewsletterCTA = () => {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -796,47 +854,10 @@ const NewsletterCTA = () => {
   );
 };
 
-// Blog Listing Component
-const BlogListing = ({ posts, onLoadMore, hasMore, onPostClick }) => {
-  return (
-    <section className="py-8 md:py-16">
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 md:mb-8 gap-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-white">Latest Articles</h2>
-          <div className="flex items-center gap-2 md:gap-4">
-            <button className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm">
-              <FiFilter /> Filter
-            </button>
-            <button className="flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm">
-              <FiTag /> Tags
-            </button>
-          </div>
-        </div>
+// ==============================================
+// MAIN BLOG COMPONENT SECTION
+// ==============================================
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-          {posts.map((post) => (
-            <BlogCard key={post.id} post={post} onClick={onPostClick} />
-          ))}
-        </div>
-
-        {/* Load More */}
-        {hasMore && (
-          <div className="text-center mt-8 md:mt-12">
-            <button 
-              onClick={onLoadMore}
-              className="group px-6 md:px-8 py-2.5 md:py-3 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 text-cyan-400 font-bold hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 transition-all text-sm md:text-base"
-            >
-              Load More Posts
-              <FiArrowRight className="inline-block ml-2 group-hover:translate-x-2 transition-transform" />
-            </button>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-};
-
-// Main Blog Component
 const Blog = () => {
   const navigate = useNavigate();
   const [displayedPosts, setDisplayedPosts] = useState([]);
@@ -875,10 +896,8 @@ const Blog = () => {
       {/* Hero Section */}
       <BlogHero onExploreClick={handleExploreLatest} />
 
-      {/* NO FILTER NAVIGATION - Removed as requested */}
-
       <div className="pt-8 md:pt-12">
-        {/* Featured Posts */}
+        {/* Featured Posts Section */}
         <section className="py-8 md:py-16">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 md:mb-8 gap-4">
@@ -898,7 +917,7 @@ const Blog = () => {
           </div>
         </section>
 
-        {/* All Posts */}
+        {/* All Posts Section */}
         <div id="blog-listing">
           <BlogListing 
             posts={displayedPosts}
@@ -908,10 +927,7 @@ const Blog = () => {
           />
         </div>
 
-        {/* Newsletter */}
-        <NewsletterCTA />
-
-        {/* Recommended Posts */}
+        {/* Recommended Posts Section */}
         <section className="py-8 md:py-16">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8 flex items-center gap-3">
@@ -929,7 +945,10 @@ const Blog = () => {
           </div>
         </section>
 
-        {/* Back to Top */}
+        {/* Newsletter Section - MOVED TO END */}
+        <NewsletterCTA />
+
+        {/* Back to Top Button */}
         <div className="sticky bottom-4 md:bottom-8 flex justify-end px-4 md:px-6">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -943,7 +962,10 @@ const Blog = () => {
   );
 };
 
-// Blog Post Detail Component
+// ==============================================
+// BLOG POST DETAIL COMPONENT SECTION
+// ==============================================
+
 export const BlogPostDetail = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
